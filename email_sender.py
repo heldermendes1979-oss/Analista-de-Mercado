@@ -92,7 +92,7 @@ class EmailSender:
 
         with smtplib.SMTP(
 
-            "smtp.gmail.com",
+            "Config.SMTP_SERVER",
 
             587,
 
