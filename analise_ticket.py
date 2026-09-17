@@ -51,7 +51,7 @@ from email_sender import (
     enviar_relatorio as enviar_email
 )
 
-LOG_DIR = Path("logs")
+Path(Config.LOG_DIR)
 
 LOG_DIR.mkdir(exist_ok=True)
 
