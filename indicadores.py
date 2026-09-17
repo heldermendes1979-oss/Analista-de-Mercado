@@ -573,5 +573,12 @@ def to_dict(
 
         "volatilidade":
             analise.volatilidade
+        
+        "score":
+
+            analise.score,
+
+        "recomendacao":
+            analise.recomendacao,
     }
 
