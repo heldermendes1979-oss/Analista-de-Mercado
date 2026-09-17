@@ -5,8 +5,8 @@ relatorio.py
 Responsável por:
 
 • Organizar a carteira
-• Calcular os Scores
-• Gerar o JSON enviado ao Gemini
+• Gerar estatísticas
+• Gerar o JSON
 • Salvar o último relatório
 """
 
@@ -25,40 +25,25 @@ from score import (
     ScoreTecnico,
     ranquear_carteira
 )
+
+
 class Relatorio:
 
     def __init__(self):
 
         self.ativos = []
-          def adicionar(self,
-                  ativo: AnaliseTecnica):
 
-        ScoreTecnico.calcular(ativo)
-
-        self.ativos.append(ativo)
-          def ordenar(self):
-
-        self.ativos = ranquear_carteira(
-            self.ativos
-        )
-
-  #######################  Estatísticas ##################
-
-      def estatisticas(self):
+    def estatisticas(self):
 
         total = len(self.ativos)
 
-        compra_forte = 0
-
-        compra = 0
-
-        manter = 0
-
-        reduzir = 0
-
-        venda = 0
-
         score_total = 0
+
+        compra_forte = 0
+        compra = 0
+        manter = 0
+        reduzir = 0
+        venda = 0
 
         for ativo in self.ativos:
 
@@ -94,7 +79,7 @@ class Relatorio:
 
             "total_ativos": total,
 
-            "score_medio": round(media,1),
+            "score_medio": round(media, 1),
 
             "compra_forte": compra_forte,
 
@@ -108,27 +93,23 @@ class Relatorio:
 
         }
 
-################### JSON #####################
-
     def gerar_json(self):
 
-        self.ordenar()
+        self.ativos = ranquear_carteira(self.ativos)
 
-        ativos = []
+        ativos_json = [
 
-        for ativo in self.ativos:
+            to_dict(ativo)
 
-            ativos.append(
-                to_dict(ativo)
-            )
+            for ativo in self.ativos
+
+        ]
 
         return {
 
             "data":
 
-                datetime.now()
-
-                .strftime("%Y-%m-%d"),
+                datetime.now().strftime("%Y-%m-%d"),
 
             "estatisticas":
 
@@ -136,11 +117,17 @@ class Relatorio:
 
             "ativos":
 
-                ativos
+                ativos_json
 
         }
-          def salvar(self,
-               arquivo="data/ultimo_relatorio.json"):
+
+    def salvar(
+
+        self,
+
+        arquivo="data/ultimo_relatorio.json"
+
+    ):
 
         Path("data").mkdir(
 
@@ -173,11 +160,9 @@ class Relatorio:
             )
 
         return dados
-####################################  Relatório ############################
+     def carregar_relatorio_anterior(
 
-def carregar_relatorio_anterior(
-
-        arquivo="data/ultimo_relatorio.json"
+    arquivo="data/ultimo_relatorio.json"
 
 ):
 
@@ -206,13 +191,13 @@ def comparar(
 
     if anterior is None:
 
-        return {}
+        return []
 
     antigos = {
 
-        x["ticker"]: x
+        ativo["ticker"]: ativo
 
-        for x in anterior["ativos"]
+        for ativo in anterior["ativos"]
 
     }
 
@@ -226,15 +211,15 @@ def comparar(
 
             continue
 
-        velho = antigos[ticker]
+        antigo = antigos[ticker]
 
-        mudou = {
+        mudancas.append({
 
             "ticker": ticker,
 
             "score_anterior":
 
-                velho["score"],
+                antigo["score"],
 
             "score_atual":
 
@@ -244,42 +229,30 @@ def comparar(
 
                 ativo["score"] -
 
-                velho["score"],
+                antigo["score"],
 
             "tendencia_anterior":
 
-                velho["tendencia"],
+                antigo["tendencia"],
 
             "tendencia_atual":
 
                 ativo["tendencia"]
 
-        }
-
-        mudancas.append(
-
-            mudou
-
-        )
+        })
 
     return mudancas
-def gerar_relatorio(
-
-        carteira
-
-):
+def gerar_relatorio(carteira):
 
     relatorio = Relatorio()
 
     for ativo in carteira:
 
-        relatorio.adicionar(
+        ScoreTecnico.calcular(ativo)
 
-            ativo
+        relatorio.ativos.append(ativo)
 
-        )
-
-    atual = relatorio.salvar()
+    atual = relatorio.gerar_json()
 
     anterior = carregar_relatorio_anterior()
 
@@ -291,6 +264,6 @@ def gerar_relatorio(
 
     )
 
-    return atual
+    relatorio.salvar()
 
-      
+    return atual
