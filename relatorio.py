@@ -125,7 +125,7 @@ class Relatorio:
 
         self,
 
-        arquivo="data/ultimo_relatorio.json"
+        arquivo="Config.HISTORICO_FILE"
 
     ):
 
@@ -162,7 +162,7 @@ class Relatorio:
         return dados
      def carregar_relatorio_anterior(
 
-    arquivo="data/ultimo_relatorio.json"
+    arquivo="Config.HISTORICO_FILE"
 
 ):
 
@@ -273,7 +273,7 @@ def salvar_json(
 
     dados,
 
-    arquivo="data/ultimo_relatorio.json"
+    arquivo="Config.HISTORICO_FILE"
 
 ):
 
