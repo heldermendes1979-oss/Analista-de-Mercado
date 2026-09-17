@@ -267,3 +267,40 @@ def gerar_relatorio(carteira):
     relatorio.salvar()
 
     return atual
+def salvar_json(
+
+    self,
+
+    dados,
+
+    arquivo="data/ultimo_relatorio.json"
+
+):
+
+    Path("data").mkdir(
+
+        exist_ok=True
+
+    )
+
+    with open(
+
+        arquivo,
+
+        "w",
+
+        encoding="utf-8"
+
+    ) as f:
+
+        json.dump(
+
+            dados,
+
+            f,
+
+            ensure_ascii=False,
+
+            indent=4
+
+        )
