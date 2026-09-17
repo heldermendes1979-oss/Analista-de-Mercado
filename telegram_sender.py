@@ -104,7 +104,7 @@ class TelegramSender:
 
             data=payload,
 
-            timeout=30
+           timeout=Config.TIMEOUT_HTTP
 
         )
 
