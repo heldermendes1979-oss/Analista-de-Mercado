@@ -35,11 +35,15 @@ logger = logging.getLogger(__name__)
 class AnaliseTecnica:
 
     ticker: str
-
     preco: float
-
     tendencia: str
 
+    nome: str = ""
+    classe: str = ""
+    pais: str = ""
+    moeda: str = ""
+    setor: str = ""
+    
     score: int = 0
 
     recomendacao: str = ""
