@@ -497,6 +497,16 @@ def to_dict(
         "preco": analise.preco,
 
         "tendencia": analise.tendencia,
+    
+        "nome": analise.nome,
+
+        "classe": analise.classe,
+
+        "pais": analise.pais,
+
+        "moeda": analise.moeda,
+
+        "setor": analise.setor,
 
         "rsi": analise.rsi,
 
