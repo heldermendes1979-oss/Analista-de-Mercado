@@ -1,23 +1,10 @@
-"""
-gemini.py
-----------
-
-Responsável pela comunicação com o Gemini.
-
-Entrada:
-    JSON da carteira
-
-Saída:
-    Relatório executivo em Markdown
-"""
-
 from __future__ import annotations
 
 import json
 import logging
+from typing import Any
 
 import google.generativeai as genai
-
 from tenacity import retry
 from tenacity import stop_after_attempt
 from tenacity import wait_exponential
@@ -26,181 +13,57 @@ from config import Config
 
 logger = logging.getLogger(__name__)
 
-################################# Inicialização ########################
+PROMPT = """
+Você é um analista sênior de ações e gestão de carteira.
+
+Responda em português, de forma simples, curta e direta.
+
+Use somente os dados do JSON.
+
+Para cada ativo, informe apenas:
+- Ticker
+- Ação: Aumentar posição, Comprar, Manter, Reduzir ou Vender
+- Justificativa curta, em uma frase
+
+Não escreva introdução, conclusão, ranking, tabela, emojis ou texto extra.
+Não cite dados que não estejam no JSON.
+Se faltar informação relevante, use apenas o que estiver disponível.
+""".strip()
+
 
 class GeminiClient:
+    """Cliente de acesso ao Gemini para gerar o relatório textual."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        api_key = Config.GEMINI_API_KEY
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY não configurada.")
 
-        if not Config.GEMINI_API_KEY:
-
-            raise ValueError(
-                "GEMINI_API_KEY não configurada."
-            )
-
-        genai.configure(
-            api_key=Config.GEMINI_API_KEY
-        )
-
+        genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(
-            "gemini-2.5-pro"
+            getattr(Config, "GEMINI_MODEL", "gemini-2.5-pro")
         )
 
-  #####################################  Prompt Institucional  ########################
-
-PROMPT = """
-Você é um Analista Sênior de Investimentos com experiência em Asset Management.
-
-Seu papel é atuar como gestor da carteira do usuário.
-
-Utilize EXCLUSIVAMENTE os indicadores fornecidos.
-
-Não invente números.
-
-Não faça previsões sem suporte técnico.
-
-Produza um relatório profissional.
-
-========================
-
-Estrutura obrigatória
-
-1 - RESUMO EXECUTIVO
-
-Explique:
-
-• panorama geral da carteira
-
-• força da tendência
-
-• distribuição dos ativos
-
-• riscos
-
-• oportunidades
-
-========================
-
-2 - RANKING
-
-Classifique todos os ativos
-do melhor para o pior.
-
-Utilize o Score Técnico.
-
-========================
-
-3 - ANÁLISE INDIVIDUAL
-
-Para cada ativo informe:
-
-Ticker
-
-Preço Atual
-
-Score Técnico
-
-Tendência
-
-RSI
-
-Interpretação do RSI
-
-ADX
-
-MACD
-
-Volume Relativo
-
-Distância EMA20
-
-Stop Loss
-
-Suporte
-
-Resistência
-
-Risco
-
-Recomendação
-
-Justificativa em até cinco linhas.
-
-========================
-
-4 - AÇÕES PRIORITÁRIAS
-
-Liste:
-
-Os três melhores ativos
-para aumento de posição.
-
-Os dois ativos
-que merecem atenção.
-
-========================
-
-5 - CONCLUSÃO
-
-Explique em linguagem de um relatório de research.
-
-Nunca utilize emojis.
-
-Nunca escreva em primeira pessoa.
-
-Sempre utilize Markdown.
-
-"""
-
-###################################  Chamada da API  ############################
-
-@retry(
-
-    stop=stop_after_attempt(5),
-
-    wait=wait_exponential(multiplier=2)
-
-)
-def gerar_relatorio(
-
-    self,
-
-    carteira_json: dict
-
-):
-
-    logger.info(
-        "Enviando dados ao Gemini..."
-    )
-
-    texto = json.dumps(
-
-        carteira_json,
-
-        indent=4,
-
-        ensure_ascii=False
-
-    )
-
-    resposta = self.model.generate_content(
-
-        PROMPT + "\n\n" + texto
-
-    )
-
-    return resposta.text
-
-def analisar_carteira(
-
-    carteira_json
-
-):
-
+    @retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=2))
+    def gerar_relatorio(self, carteira_json: dict[str, Any]) -> str:
+        """Gera um relatório curto e objetivo a partir do JSON da carteira."""
+        logger.info("Enviando dados ao Gemini...")
+
+        texto = json.dumps(carteira_json, ensure_ascii=False, indent=2)
+
+        resposta = self.model.generate_content(
+            [PROMPT, texto],
+            generation_config={
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_output_tokens": 4096,
+            },
+        )
+
+        return str(getattr(resposta, "text", "")).strip()
+
+
+def analisar_carteira(carteira_json: dict[str, Any]) -> str:
+    """Função de conveniência para gerar o relatório com o Gemini."""
     cliente = GeminiClient()
-
-    return cliente.gerar_relatorio(
-
-        carteira_json
-
-    )
+    return cliente.gerar_relatorio(carteira_json)
