@@ -1,10 +1,3 @@
-"""
-models.py
----------
-
-Modelos de dados utilizados pelo Portfolio Agent.
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -12,9 +5,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True, slots=True)
 class AtivoConfig:
-    """
-    Configuração estática de um ativo da carteira.
-    """
+    """Configuração estática de um ativo da carteira."""
 
     ticker: str
     nome: str
