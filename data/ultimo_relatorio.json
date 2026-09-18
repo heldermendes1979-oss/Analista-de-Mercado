@@ -1,0 +1,14 @@
+{
+    "data": "2026-09-18",
+    "estatisticas": {
+        "total_ativos": 0,
+        "score_medio": 0,
+        "compra_forte": 0,
+        "compra": 0,
+        "manter": 0,
+        "reduzir": 0,
+        "venda": 0
+    },
+    "ativos": [],
+    "mudancas": []
+}
