@@ -114,39 +114,143 @@ class Config:
 
 CARTEIRA = [
 
-    # Brasil
+    # ===========================
+    # AÇÕES BRASIL
+    # ===========================
 
-    "VALE3.SA",
+    {
+        "ticker": "VALE3.SA",
+        "nome": "Vale",
+        "classe": "Ação",
+        "pais": "Brasil",
+        "moeda": "BRL",
+        "setor": "Mineração"
+    },
 
-    "PETR3.SA",
+    {
+        "ticker": "PETR3.SA",
+        "nome": "Petrobras ON",
+        "classe": "Ação",
+        "pais": "Brasil",
+        "moeda": "BRL",
+        "setor": "Petróleo"
+    },
 
-    "BBAS3.SA",
+    {
+        "ticker": "BBAS3.SA",
+        "nome": "Banco do Brasil",
+        "classe": "Ação",
+        "pais": "Brasil",
+        "moeda": "BRL",
+        "setor": "Financeiro"
+    },
 
-    "ITSA4.SA",
+    {
+        "ticker": "ITSA4.SA",
+        "nome": "Itaúsa",
+        "classe": "Ação",
+        "pais": "Brasil",
+        "moeda": "BRL",
+        "setor": "Holding"
+    },
 
-    "WEGE3.SA",
+    {
+        "ticker": "WEGE3.SA",
+        "nome": "WEG",
+        "classe": "Ação",
+        "pais": "Brasil",
+        "moeda": "BRL",
+        "setor": "Industrial"
+    },
 
-    "POMO3.SA",
+    {
+        "ticker": "POMO3.SA",
+        "nome": "Marcopolo",
+        "classe": "Ação",
+        "pais": "Brasil",
+        "moeda": "BRL",
+        "setor": "Industrial"
+    },
 
-    "AXIA3.SA",
+    {
+        "ticker": "AXIA3.SA",
+        "nome": "Axia",
+        "classe": "Ação",
+        "pais": "Brasil",
+        "moeda": "BRL",
+        "setor": "Tecnologia"
+    },
 
+    # ===========================
     # ETFs EUA
+    # ===========================
 
-    "VGT",
+    {
+        "ticker": "VGT",
+        "nome": "Vanguard Information Technology ETF",
+        "classe": "ETF",
+        "pais": "Estados Unidos",
+        "moeda": "USD",
+        "setor": "Tecnologia"
+    },
 
-    "TFLO",
+    {
+        "ticker": "TFLO",
+        "nome": "iShares Treasury Floating Rate Bond ETF",
+        "classe": "ETF",
+        "pais": "Estados Unidos",
+        "moeda": "USD",
+        "setor": "Renda Fixa"
+    },
 
-    "GLD",
+    {
+        "ticker": "GLD",
+        "nome": "SPDR Gold Shares",
+        "classe": "ETF",
+        "pais": "Estados Unidos",
+        "moeda": "USD",
+        "setor": "Ouro"
+    },
 
-    "RSP",
+    {
+        "ticker": "RSP",
+        "nome": "Invesco S&P 500 Equal Weight",
+        "classe": "ETF",
+        "pais": "Estados Unidos",
+        "moeda": "USD",
+        "setor": "Índice"
+    },
 
-    "KWEB",
+    {
+        "ticker": "KWEB",
+        "nome": "KraneShares CSI China Internet ETF",
+        "classe": "ETF",
+        "pais": "China",
+        "moeda": "USD",
+        "setor": "Internet"
+    },
 
+    # ===========================
     # Cripto
+    # ===========================
 
-    "BTC-USD",
+    {
+        "ticker": "BTC-USD",
+        "nome": "Bitcoin",
+        "classe": "Criptomoeda",
+        "pais": "Global",
+        "moeda": "USD",
+        "setor": "Cripto"
+    },
 
-    "SOL-USD"
+    {
+        "ticker": "SOL-USD",
+        "nome": "Solana",
+        "classe": "Criptomoeda",
+        "pais": "Global",
+        "moeda": "USD",
+        "setor": "Cripto"
+    }
 
 ]
 ###############################################################################
