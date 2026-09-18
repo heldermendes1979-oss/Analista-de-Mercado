@@ -174,9 +174,9 @@ class PortfolioAgent:
 
         estat = dados["estatisticas"]
 
-        melhores = dados["ativos"][:3]
+        melhores = relatorio.ativos[:3]
 
-        piores = dados["ativos"][-2:]
+        piores = relatorio.ativos[-2:]
 
         linhas = []
 
@@ -424,7 +424,7 @@ class PortfolioAgent:
 
         linhas.append("")
 
-        for ativo in dados["ativos"]:
+        for ativo in relatorio.ativos:
 
             linhas.append(
                 f"## {ativo['ticker']}"
