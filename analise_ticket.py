@@ -33,7 +33,7 @@ from email_sender import (
     enviar_relatorio as enviar_email
 )
 
-Path(Config.LOG_DIR)
+LOG_DIR = Path(Config.LOG_DIR)
 
 LOG_DIR.mkdir(exist_ok=True)
 
