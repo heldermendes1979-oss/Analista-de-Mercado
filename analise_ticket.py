@@ -164,7 +164,7 @@ class PortfolioAgent:
 
         )
 
-        self.relatorio.salvar()
+        self.relatorio.salvar_json(dados)
 
         return atual
 
