@@ -121,12 +121,23 @@ class PortfolioAgent:
 
                 )
 
-                ativo = analisar_ativo(
+                    ticker = item["ticker"]
 
-                    ticker
+                    ativo = analisar_ativo(ticker)
 
-                )
+                    ativo.nome = item["nome"]
 
+                    ativo.classe = item["classe"]
+
+                    ativo.pais = item["pais"]
+
+                    ativo.moeda = item["moeda"]
+
+                    ativo.setor = item["setor"]
+
+    ScoreTecnico.calcular(ativo)
+
+    self.carteira.append(ativo)
                 ScoreTecnico.calcular(
 
                     ativo
