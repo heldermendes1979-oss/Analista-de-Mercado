@@ -1,25 +1,5 @@
 ##############  analise_ticket parte 1 #############################
 
-"""
-analise_ticket.py
------------------
-
-Programa principal do Portfolio Agent.
-
-Fluxo:
-
-1. Carrega configurações
-2. Analisa todos os ativos
-3. Calcula Score
-4. Gera JSON
-5. Envia ao Gemini
-6. Envia Telegram
-7. Envia E-mail
-8. Salva histórico
-
-Autor: Helder Mendes / ChatGPT
-"""
-
 from __future__ import annotations
 
 import logging
@@ -29,6 +9,8 @@ from pathlib import Path
 from colorlog import ColoredFormatter
 
 from config import CARTEIRA
+
+from config import Config
 
 from indicadores import analisar_ativo
 
