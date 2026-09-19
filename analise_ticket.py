@@ -132,7 +132,14 @@ def _justificativa_curta(ativo: dict[str, Any]) -> str:
     if "compra" in macd_status or "acima" in volume_status:
         return "Momento melhora, mas ainda com cautela."
     return "Sem força técnica suficiente para compra."
-    class PortfolioAgent:
+   
+class PortfolioAgent:
+    """Orquestra a análise técnica, o relatório e os envios."""
+
+    def __init__(self) -> None:
+        self.carteira = []
+        self.relatorio = Relatorio()
+        
     """Orquestra a análise técnica, o relatório e os envios."""
 
     def __init__(self) -> None:
