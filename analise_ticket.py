@@ -1,21 +1,3 @@
-"""
-analise_ticket.py
------------------
-
-Programa principal do Portfolio Agent.
-
-Fluxo:
-
-1. Carrega configurações
-2. Analisa todos os ativos
-3. Calcula score
-4. Gera relatório estruturado
-5. Envia ao Gemini
-6. Envia Telegram
-7. Envia e-mail
-8. Salva histórico
-"""
-
 from __future__ import annotations
 
 import json
@@ -38,13 +20,13 @@ from telegram_sender import enviar_relatorio, enviar_resumo
 def _configurar_logger() -> logging.Logger:
     """Configura o logger do módulo apenas uma vez."""
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(getattr(logging, Config.LOG_LEVEL.upper(), logging.INFO))
 
     if logger.handlers:
         return logger
 
-    LOG_DIR = Path(Config.LOG_DIR)
-    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_dir = Path(Config.LOG_DIR)
+    log_dir.mkdir(parents=True, exist_ok=True)
 
     formatter_colorido = ColoredFormatter(
         "%(log_color)s%(levelname)-8s%(reset)s %(message)s"
@@ -57,7 +39,7 @@ def _configurar_logger() -> logging.Logger:
     console.setFormatter(formatter_colorido)
 
     arquivo = logging.FileHandler(
-        LOG_DIR / "portfolio.log",
+        log_dir / "portfolio.log",
         encoding="utf-8",
     )
     arquivo.setFormatter(formatter_arquivo)
@@ -113,7 +95,7 @@ def _acao_resumida(recomendacao: str) -> str:
 
 def _justificativa_curta(ativo: dict[str, Any]) -> str:
     """Gera uma justificativa curta e direta para o ativo."""
-    score = int(ativo.get("score", 0))
+    score = int(ativo.get("score", 0) or 0)
     tendencia = str(ativo.get("tendencia", "")).lower()
     rsi = float(ativo.get("rsi", 0) or 0)
     macd_status = str(ativo.get("macd_status", "")).lower()
@@ -132,14 +114,9 @@ def _justificativa_curta(ativo: dict[str, Any]) -> str:
     if "compra" in macd_status or "acima" in volume_status:
         return "Momento melhora, mas ainda com cautela."
     return "Sem força técnica suficiente para compra."
-   
-class PortfolioAgent:
-    """Orquestra a análise técnica, o relatório e os envios."""
 
-    def __init__(self) -> None:
-        self.carteira = []
-        self.relatorio = Relatorio()
-        
+
+class PortfolioAgent:
     """Orquestra a análise técnica, o relatório e os envios."""
 
     def __init__(self) -> None:
@@ -229,7 +206,8 @@ class PortfolioAgent:
             linhas.append(f"- {ticker}: {acao} | {justificativa}")
 
         return "\n".join(linhas)
-            def gerar_relatorio_gemini(self, dados: dict[str, Any]) -> str:
+
+    def gerar_relatorio_gemini(self, dados: dict[str, Any]) -> str:
         """Solicita ao Gemini um relatório textual a partir do JSON da carteira."""
         logger.info("Solicitando análise ao Gemini...")
         return analisar_carteira(dados)
@@ -297,7 +275,9 @@ class PortfolioAgent:
         self.salvar_historico(dados)
 
         logger.info("Processo finalizado.")
-        def main() -> None:
+
+
+def main() -> None:
     """Ponto de entrada do programa."""
     agente = PortfolioAgent()
     agente.executar()
